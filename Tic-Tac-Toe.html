@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Abraham's & McCown's Tic-Tac-Toe</title>
+	<meta charset="utf-8">
+	<script>
+
+var humansTurn = true;
+var NameOfWinner = "";
+var Letter = "";
+function NewTurn(info)
+{
+
+  if (humansTurn == true){
+    document.getElementById("turnInfo").innerHTML = "Your Turn"
+  }
+  else {
+    document.getElementById("turnInfo").innerHTML = "Computer's Turn"
+  }
+}
+
+
+
+function gameOver() {
+  var isOver = false;
+
+	for (var i = 1, c=1; isOver == false && i<=9; i +=3, c++) {
+	//rows
+	if(Letter == document.querySelector("#c"+i).innerHTML
+		&&
+		Letter == document.querySelector("#c"+(i+1)).innerHTML
+		&&
+		Letter == document.querySelector("#c"+(i+2)).innerHTML){
+		isOver = true;
+	 	NameOfWinner = document.querySelector("#c"+(i+1)).innerHTML;
+	}
+	//columns
+	else if(Letter == document.querySelector("#c"+c).innerHTML
+		&&
+		Letter == document.querySelector("#c"+(c+3)).innerHTML
+		&&
+		Letter == document.querySelector("#c"+(c+6)).innerHTML){
+		isOver = true;
+	 	NameOfWinner = document.querySelector("#c"+c).innerHTML;
+	}
+	//Diagonal \
+	else if(Letter == document.querySelector("#c1").innerHTML
+		&&
+		Letter == document.querySelector("#c5").innerHTML
+		&&
+		Letter == document.querySelector("#c9").innerHTML){
+		isOver = true;
+	 	NameOfWinner = document.querySelector("#c9").innerHTML;
+	}
+	//Diagonal /
+	else if(Letter == document.querySelector("#c3").innerHTML
+		&&
+		Letter == document.querySelector("#c5").innerHTML
+		&&
+		Letter == document.querySelector("#c7").innerHTML){
+		isOver = true;
+	 	NameOfWinner = document.querySelector("#c7").innerHTML;
+	}
+	else  {
+
+	}
+}
+  return isOver;
+
+}
+
+
+function NewGame() {
+  for (var i = 1; i <= 9; i++) {
+    document.querySelector("#c" + i).innerHTML = "";
+
+    document.querySelector("#c" + i).classList.remove("o");
+    document.querySelector("#c" + i).classList.remove("x");
+	}
+}
+// Called when the user clicks on a box in the game board
+
+function makeMove(e) {
+
+//  if (gameOver == true){
+//    var Announcement= NameOfWinner +" Won";
+//}
+//else {
+	var box = e.target;
+
+  if (box.innerHTML == "" && humansTurn == true){
+  box.classList.add("x");
+ // e.target is the box that was clicked on
+	box.innerHTML = "X";
+	Letter = box.innerHTML;
+  humansTurn = false;
+//    document.getElementById("turnInfo").innerHTML = "Computer's Turn"
+
+	if(gameOver() == true){
+	//	NameOfWinner = document.querySelector("#c" +1).innerHTML;
+		document.getElementById("turnInfo").innerHTML = NameOfWinner + " Won";
+		NewGame();
+	}
+	else {
+		NewTurn();
+
+  	setTimeout(makeComputerMove, 1000);
+	}
+}
+}
+//}
+
+// Put an O at a randomly selected location
+function makeComputerMove() {
+  if (gameOver == true){
+    var Announcement= NameOfWinner +" Won";
+		NewGame();
+  }
+  else {
+	// Keep count of how many times we try to pick an unoccuppied slot so we avoid
+	// accidentally getting stuck in the loop
+	var count = 0;
+	var move;
+	var playerAtLocation;
+	do {
+		// Get a random number between 1 and 9
+		move = Math.floor(Math.random() * 9) + 1;
+  //  move = Math.floor(Math.random() * 9) + 2;
+		count++;
+		playerAtLocation = document.querySelector("#c" + move).innerHTML;
+	} while (playerAtLocation !== "" && count < 100);
+
+	if (count == 100) {
+		document.getElementById("turnInfo").innerHTML = "It's a tie";
+		alert("Computer can't find an open move.");
+
+	}
+	else {
+		var box = document.querySelector("#c" + move);
+    box.classList.add("o");
+    box.innerHTML = "O";
+		Letter = box.innerHTML;
+		if(gameOver() == true){
+		//	NameOfWinner = document.querySelector("#c" +1).innerHTML;
+			document.getElementById("turnInfo").innerHTML = NameOfWinner + " Won";
+
+		}
+		else {
+    humansTurn = true;
+  //  document.getElementById("turnInfo").innerHTML = "Your Turn"
+  	NewTurn();
+	}
+	}
+  }
+}
+
+// Called when the DOM finishes loading
+function start() {
+
+    // Register all event handlers/listeners
+	for (var i = 1; i <= 9; i++) {
+		document.querySelector("#c" + i).addEventListener("click", makeMove);
+  }
+   document.getElementById("newGameBtn").addEventListener("click", NewGame);
+}
+
+// Call start after DOM finishes loading
+window.addEventListener("DOMContentLoaded", start);
+
+	</script>
+
+	<style>
+
+	body {
+		font-family: arial, sans-serif;
+	}
+
+	#board {
+		font-size: 85px;
+		display: grid;
+		grid-template-columns: 100px 100px 100px;
+		grid-template-rows: 100px 100px 100px;
+		grid-gap: 10px;
+	}
+
+	#board > div {
+		border: 1px solid LightSkyBlue;
+		text-align: center;
+	}
+
+	#board > div:hover {
+		border-color: blue;
+	}
+
+	.x {
+		color: red;
+	}
+
+	.o {
+		color: blue;
+	}
+
+	</style>
+
+</head>
+
+<body>
+
+<h1>Tic-Tac-Toe</h1>
+
+<div id="board">
+	<div id="c1"></div>
+	<div id="c2"></div>
+	<div id="c3"></div>
+	<div id="c4"></div>
+	<div id="c5"></div>
+	<div id="c6"></div>
+	<div id="c7"></div>
+	<div id="c8"></div>
+	<div id="c9"></div>
+</div>
+
+<p id="turnInfo">
+Your Turn
+</p>
+
+<p>
+<input type="button" value="New Game" id="newGameBtn">
+</p>
+
+</body>
+</html>
