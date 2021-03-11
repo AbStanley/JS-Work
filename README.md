@@ -1,3 +1,4 @@
-# JS-Work
+# TicTacToe
 
-This is a reposity where I add some of my work in javascript for practice
+
+![image](https://user-images.githubusercontent.com/25715005/110725475-47f62000-81dd-11eb-9529-446bd60c7af3.png)
